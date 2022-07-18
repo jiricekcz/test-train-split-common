@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from asset_manager import IAssetManager
 
-class AssetLoader(ABC):
+class IAssetLoader(ABC):
     @abstractmethod
     def loadAssets(self, assetManager: IAssetManager) -> None:
         """
