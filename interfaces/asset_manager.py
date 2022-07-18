@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 class IAsset(ABC):
     sequence: str
+    name: str
 
 class IAssetManager(ABC):
     @abstractmethod
