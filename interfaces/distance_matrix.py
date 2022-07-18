@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterable, Tuple
+from typing import Callable, Iterable, Tuple
 class IDistanceMatrix(ABC):
     @abstractmethod
     def getRawDistance(self, x: int, y: int) -> int:
@@ -49,3 +49,13 @@ class IDistanceMatrix(ABC):
         """
         minD, maxD = self.getMinMaxRawDistance()
         self.setRawDistance(x, y, int(value * (maxD - minD) + minD))
+    
+    def elements(self) -> Iterable[Tuple[int, int, int, Callable[[float], None]]]:
+        """
+        Returns an iterator over the elements in the matrix.
+        """
+        t = 0
+        for i in range(self.getMatrixSize()):
+            for j in range(self.getMatrixSize()):
+                yield t, i, j, lambda d: self.setDistance(i, j, d)
+                t += 1

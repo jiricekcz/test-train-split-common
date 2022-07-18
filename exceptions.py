@@ -1,4 +1,4 @@
-from common.interfaces.assest_manager import IAssetManager, IAsset
+from common.interfaces.asset_manager import IAssetManager, IAsset
 class AssetAppendException(Exception):
     """
     Exception raised when an asset cannot be appended to the asset manager.
