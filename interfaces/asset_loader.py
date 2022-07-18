@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from asset_manager import IAssetManager
+from common.interfaces.asset_manager import IAssetManager
 
 class IAssetLoader(ABC):
     @abstractmethod
