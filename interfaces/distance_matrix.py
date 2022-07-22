@@ -54,7 +54,8 @@ class IDistanceMatrix(ABC):
         Sets the distance between two objects in the matrix represented by a float in the range [0, 1].
         """
         minD, maxD = self.getMinMaxRawDistance()
-        self.setRawDistance(x, y, int(value * (maxD - minD) + minD))
+        rawDist = max(1, int(value * (maxD - minD) + minD))
+        self.setRawDistance(x, y, rawDist)
 
     def elements(
             self) -> Iterable[Tuple[int, int, int, Callable[[float], None]]]:
@@ -65,4 +66,22 @@ class IDistanceMatrix(ABC):
         for i in range(self.getMatrixSize()):
             for j in range(self.getMatrixSize()):
                 yield t, i, j, lambda d: self.setDistance(i, j, d)
+                t += 1
+
+    def elementsToFill(
+            self) -> Iterable[Tuple[int, int, int, Callable[[float], None]]]:
+        """
+        Returns an iterator over the elements in the matrix. This iterator only returns elements that have not been filled.
+        """
+        t = 0
+        for i in range(self.getMatrixSize()):
+            for j in range(self.getMatrixSize()):
+                if self.getRawDistance(i, j) != 0: continue
+
+                def setDistance(distance, asymetric=False):
+                    self.setDistance(i, j, distance)
+                    if not asymetric:
+                        self.setDistance(j, i, distance)
+
+                yield t, i, j, setDistance
                 t += 1
