@@ -2,9 +2,18 @@ from abc import ABC, abstractmethod
 from common.interfaces.asset_manager import IAssetManager
 from common.interfaces.distance_matrix import IDistanceMatrix
 from typing import Callable
+
+
 class IDistanceCalculator(ABC):
+
     @abstractmethod
-    def calculateDistances(self, distances: IDistanceMatrix, assets: IAssetManager, statusReport: Callable[[int, int, float], None] = (lambda stepsDone, totalSteps, percetage: None)) -> None:
+    def calculateDistances(
+        self,
+        distances: IDistanceMatrix,
+        assets: IAssetManager,
+        statusReport: Callable[[int, int, float], None] = (
+            lambda stepsDone, totalSteps, percetage: None)
+    ) -> None:
         """
         Calculates the distances between all assets and stores them in the given distance matrix.
         The statusReport function is called when progress changes significantly, and can be used to show a progress bar. Parameters are:
