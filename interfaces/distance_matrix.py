@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Callable, Iterable, Tuple
-
+import numpy as np
 
 class IDistanceMatrix(ABC):
 
@@ -40,21 +40,39 @@ class IDistanceMatrix(ABC):
         NOTE: This can be a very expensive operation for large matrices. May cause memory crashes, if matrix can't fit into memory.
         """
         pass
+    @abstractmethod 
+    def getNumpyNDArray(self) -> np.ndarray:
+        """
+        Returns the matrix as a numpy NDArray.
+        """
+        pass
+
+    def rawDistanceToDistance(self, rawDist: int) -> float:
+        """
+        Converts a raw distance to a distance in the range [0, 1].
+        """
+        minD, maxD = self.getMinMaxRawDistance()
+        return (rawDist - minD) / (maxD - minD)
+    
+    def distanceToRawDistance(self, distance: float) -> int:
+        """
+        Converts a distance in the range [0, 1] to a raw distance.
+        """
+        minD, maxD = self.getMinMaxRawDistance()
+        return int(distance * (maxD - minD) + minD)
 
     def getDistance(self, x: int, y: int) -> float:
         """
         Gets the distance between two objects in the matrix represented by a float in the range [0, 1].
         """
         rawD = self.getRawDistance(x, y)
-        minD, maxD = self.getMinMaxRawDistance()
-        return (rawD - minD) / (maxD - minD)
+        return self.rawDistanceToDistance(rawD)
 
     def setDistance(self, x: int, y: int, value: float) -> None:
         """
         Sets the distance between two objects in the matrix represented by a float in the range [0, 1].
         """
-        minD, maxD = self.getMinMaxRawDistance()
-        rawDist = max(1, int(value * (maxD - minD) + minD))
+        rawDist = max(1, self.distanceToRawDistance(value))
         self.setRawDistance(x, y, rawDist)
 
     def elements(
