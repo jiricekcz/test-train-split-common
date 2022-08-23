@@ -16,6 +16,6 @@ This class is an abstract class for splitting assets into chunks by IDs and dist
 """
 class ISplitter(ABC):
     @abstractmethod
-    def calculateSplit(self, distances: IDistanceMatrix, distribution: "list[int]") -> ISplit:
+    def calculateSplit(self, distances: IDistanceMatrix, distribution: "list[int]") -> Iterable[ISplit]:
         pass
 
